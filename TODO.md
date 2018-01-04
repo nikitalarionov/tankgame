@@ -1,23 +1,67 @@
-1) Find problem solving for lookup entities with point position
+SPRINT 2
 
- I - Use libraries
- I.1 - https://github.com/mikolalysenko/static-kdtree
- I.2 - https://github.com/ubilabs/kd-tree-javascript/
+1. Add Healt bar for objects
+2. Add timer class
+3. Add command wait (duration)
+4. Add command stop - moving
+5. Add keys to rotate gun
 
- II - Write your own GRID
+Version will be 0.02a
 
-2) Make tank movement much betters 
+SPRINT 3
 
-  1. set movement direction only when key is a pressed
-  2. implement method that shedule task moveTo(position)
+6. Add component to tank (engine)
 
-3) Fire - enchantments
+РАЗРАБОТКА ДВИГАТЕЛЯ:
 
-  1. Pressing at fire button should launch bullet immedliaty
-  2. Dont change fire queqe direction while moving 
+rps - обороты в секунду
 
+// для объяснения
+// min rps 0
+// max rps 6000
 
-4) Healt bar for enemies
+// при max rps - развивается самая максимальная скорость
+// передач - не будет в первой версии
 
-5) Implement Redactor class
+// набирать rps надо быстро 
+// чтобы набрать обороты надо использовать коэффициент (константа)
+// например velocity 35, rps 0, const = 50
+// грубый расчет:
 
+// за первую секунду будет разгон
+// 35 * 50 = 1750 rps (100%)
+// за вторую секунду будет разгон
+// 35 * 50 * 0.8 = 1400 rps (80%)
+// за третью секунду будет разгон 
+// 35 * 50 * 0.6 = 1050
+// на третей секунде оборотов будет 
+// 1750 + 1400 + 1050 = 4200
+// за четвертую секунду будет разгон
+// 35 * 50 * 0.45 = 785~ (4200 + 785) = 5000~
+// за пятую секунду будет разгон 
+// 35 * 50 * 0.30 = 525 (5000 + 525) = 5525
+// за шестую секунду будет разгон 525 / 2 = 275
+// 5525 + 275 = 5800
+
+// Процент разгона от оборотов двигателя
+// с 0 до 2к (100%)
+// с 2к по 3к (80%)
+// с 3к по 4к (60%)
+// c 4к по 5к (45%)
+// с 5к по 5.5k (30%)
+// c 5.5k по 6k (15%)
+
+// тормоз скидывает за 1 сек 1800 оборотов 
+// чтобы затормозить с 6000 надо почти 3 секунды для полной остановки
+
+// В БУДУЩЕМ!:
+// при максимальной скорости будет уменьшаться угол поворота
+// невозможно будет сменить вектор движения
+// если нельзя будет затормозить, будет урон по хп
+
+7. Improve movement, check collision while movement
+
+- Не давать танкам наезжать на друг друга
+- Не давать танкам уезжать за пределы видимого пространства
+
+Version will be 0.03a
