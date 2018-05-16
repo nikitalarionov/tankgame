@@ -1,19 +1,22 @@
-import { testLevel1 } from 'core/level'
 import { getCanvasEl } from 'lib/utils'
 
 // TODO MOVE TO UTILS
-const drawFPS = function(ctx, value, x, y, color) {
+const drawFPS = function (ctx: any, value: any, x: number, y: number, color:any) {
   ctx.fillStyle = color || 'black'
   ctx.font = '20px Helvetica'
-  ctx.fillText(Math.round(value), x + 20, y - 5)
+  ctx.fillText(String(Math.round(value)), x + 20, y - 5)
 }
 
-// TODO MOVE TO core/game.js
-class Game {
+export default class Game {
+    private reqId: number;
 
-  maxFps = 100
+    static getCanvasCtx(): any {
+        throw new Error("Method not implemented.");
+    }
 
-  listeners = []
+    maxFps = 100
+
+  listeners: any[] = []
 
   state = {
     paused: false
@@ -24,6 +27,17 @@ class Game {
     minutes: 0,
     hours: 0,
   }
+    private fps: any;
+    private readonly frameDuration: number;
+    private lastPausedTime: number;
+    private canvasEl: any;
+    private ctx: CanvasRenderingContext2D;
+    private lastLoopTime: number;
+    private currentLevel: any;
+    private paused: any;
+    private dt: any;
+    private mouse: any;
+    private canvas: any;
 
   constructor() {
     this.frameDuration = 1 / this.maxFps
@@ -47,12 +61,12 @@ class Game {
     // IMPLEMENT
   }
 
-  setCanvasEl(canvas) {
+  setCanvasEl(canvas:any) {
     if (!canvas) {
       this.canvasEl = getCanvasEl()
     }
-    else if (canvasEl) {
-      this.canvasEl = canvasEl
+    else if (canvas) {
+      this.canvasEl = canvas
     }
   }
 
@@ -66,19 +80,19 @@ class Game {
   }
 
   setContext() {
-    this.ctx = this.getCanvasCtx()
+    this.ctx = Game.getCanvasCtx()
   }
 
   addListeners() {
     // Event Listeners
     addEventListener('mousemove', event => {
-      mouse.x = event.clientX
-      mouse.y = event.clientY
+      this.mouse.x = event.clientX
+      this.mouse.y = event.clientY
     })
 
     addEventListener('resize', () => {
-      canvas.width = innerWidth
-      canvas.height = innerHeight
+      this.canvas.width = innerWidth
+      this.canvas.height = innerHeight
       this.start()
     })
   }
@@ -98,7 +112,7 @@ class Game {
       this.lastLoopTime = now - (
         this.dt % this.frameDuration
       )
-      this.time.seconds = (this.lastLoopTime / 1000).toFixed(2)
+      this.time.seconds = (this.lastLoopTime / 1000)
     }
   }
 
@@ -108,7 +122,8 @@ class Game {
     }
   }
 
-  loadLevel(fn) {
+  loadLevel(parameters: { fn: any }) {
+      let fn = parameters.fn;
     this.currentLevel = fn(this)
   }
 
@@ -117,7 +132,7 @@ class Game {
     c.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height)
 
     this.currentLevel.render(this)
-    drawFPS(this.getCtx(), this.fps, innerWidth - 50, 25)
+    drawFPS(this.getCtx(), this.fps, innerWidth - 50, 25, 'black')
   }
 
   start() {
@@ -127,18 +142,3 @@ class Game {
 
 }
 
-// TODO rename file to index.js
-
-const initTestEnvirotment = function() {
-  const game = window.game = new Game()
-  game.setCanvasEl()
-  game.loadLevel(testLevel1, 'test-1')
-  game.start()
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  initTestEnvirotment()
-})
-
-// TODO READ PERFOMANCE TIPS
-// https://www.html5rocks.com/en/tutorials/canvas/performance/
